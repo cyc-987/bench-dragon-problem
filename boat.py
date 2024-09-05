@@ -19,7 +19,8 @@ class boat:
         self.board = [board(self.head_degree, map1, self.body_len) for _ in range(223)]
         self.board[0].length = self.head_len
         
-        self.updateLocation(initDegree)     
+        self.updateLocation(initDegree)
+        self.saveCurrentStatus("initial.csv")
         
         
     def updateLocation(self, headangle):
@@ -27,14 +28,30 @@ class boat:
         angle: 龙头角度位置，单位为度
         '''
         self.board[0].head_degree = headangle
+        self.head_degree = headangle
         self.board[0].updateStatus()
         for i in range(1, 223):
-            print(i-1)
-            print(self.board[i-1].head_degree, self.board[i-1].tail_degree)
-            print(self.board[i-1].head_line_speed, self.board[i-1].tail_line_speed)
             self.board[i].head_degree = self.board[i-1].tail_degree
             self.board[i].head_line_speed = self.board[i-1].tail_line_speed
             self.board[i].updateStatus()
+    
+    def saveCurrentStatus(self, filename):
+        '''
+        保存当前状态
+        '''
+        with open (filename, 'w') as f:
+            f.write('node,head_degree,tail_degree,stick_degree,head_cut_degree,tail_cut_degree,stick_speed,head_line_speed,tail_line_speed\n')
+            
+            for i in range(223):
+                f.write(str(i) + ',' +
+                        str(self.board[i].head_degree) + ',' + 
+                        str(self.board[i].tail_degree) + ',' + 
+                        str(self.board[i].stick_degree) + ',' + 
+                        str(self.board[i].head_cut_degree) + ',' + 
+                        str(self.board[i].tail_cut_degree) + ',' + 
+                        str(self.board[i].stick_speed) + ',' + 
+                        str(self.board[i].head_line_speed) + ',' + 
+                        str(self.board[i].tail_line_speed) + '\n')
 
 
 

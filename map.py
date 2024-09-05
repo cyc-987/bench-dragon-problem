@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import brentq
 from scipy.misc import derivative
+from scipy.integrate import quad
 
 # 创建等距螺线类
 class Map:
@@ -63,4 +64,45 @@ class Map:
         tangent_angle = np.degrees(np.arctan2(dy_da, dx_da))
         
         return tangent_angle
+    
+    def curveLength(self, start_angle, end_angle):
+        '''
+        计算曲线长度
+        start_angle: 起始角度，单位为度
+        end_angle: 结束角度，单位为度
+        '''
+        def integrand(angle):
+            def x_func(a):
+                return self.angleToPos(a)[0]
             
+            def y_func(a):
+                return self.angleToPos(a)[1]
+            
+            dx_da = derivative(x_func, angle, dx=1e-6)
+            dy_da = derivative(y_func, angle, dx=1e-6)
+            
+            return np.sqrt(dx_da**2 + dy_da**2)
+        
+        length, _ = quad(integrand, start_angle, end_angle)
+        return abs(length)
+    
+    def move(self, start_angle, distance, direction):
+        '''
+        start_angle: 起始角度，单位为度
+        distance: 距离，单位为m
+        direction: 方向，1为逆时针方向，-1为顺时针方向
+        '''
+        location_origin = self.angleToPos(start_angle)
+        a = location_origin[0]
+        b = location_origin[1]
+        
+        def f(x):
+            return self.curveLength(start_angle, x) - distance
+        
+        compare = f(start_angle)
+        for i in range(0, start_angle):
+            if f(start_angle + direction*i) * compare < 0:
+                break
+        
+        return brentq(f, start_angle, start_angle+direction*i, xtol=1e-6) 
+        

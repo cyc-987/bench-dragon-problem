@@ -1,7 +1,5 @@
 import numpy as np
-from scipy.optimize import brentq
-from scipy.misc import derivative
-from scipy.integrate import quad
+from scipy.optimize import brentq, brenth
 
 # 创建等距螺线类
 class Map:
@@ -48,11 +46,11 @@ class Map:
             location = self.angleToPos(x)
             return (location[0] - a)**2 + (location[1] - b)**2 - len**2
         
-        compare = f(angle)
-        for i in range(1, 360):
+        compare = -1
+        for i in range(0, 360):
             if f(angle + direction*i) * compare < 0:
                 break
-        assert i < 359
+        assert i < 359 and i != 0
         
         return brentq(f, angle, angle+direction*i, xtol=1e-6)
     
@@ -106,10 +104,13 @@ class Map:
         def f(x):
             return self.curveLength(start_angle, x) - distance
         
-        compare = f(start_angle)
-        for i in range(0, int(start_angle)+1):
+        compare = -1
+        for i in range(0, int(start_angle)+361):
             if f(start_angle + direction*i) * compare < 0:
                 break
+        if i == int(start_angle)+360 or i == 0:
+            print("Warning: move may fail")
+            # return start_angle
         
         return brentq(f, start_angle, start_angle+direction*i, xtol=1e-6) 
         

@@ -105,7 +105,7 @@ class Map:
             return self.curveLength(start_angle, x) - distance
         
         compare = f(start_angle)
-        for i in range(0, start_angle):
+        for i in range(0, int(start_angle)+1):
             if f(start_angle + direction*i) * compare < 0:
                 break
         

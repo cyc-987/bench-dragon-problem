@@ -9,6 +9,7 @@ class Map:
     def __init__(self, interval): # interval为等距螺线的间隔，单位为m
         self.interval = interval
         self.scale = interval/360.0 
+        self.interval = interval
         
     def angleToPos(self, angle):
         '''
@@ -29,7 +30,7 @@ class Map:
         角度坐标转换为距离原点距离
         angle: 角度，单位为度
         '''
-        return self.scale * angle
+        return self.interval * angle / 360.0
     
     def findAngle(self, angle, len, direction):
         '''

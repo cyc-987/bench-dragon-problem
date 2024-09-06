@@ -35,9 +35,10 @@ for i in tqdm.tqdm(range(numofpoints)):
             return headCollectionDetect() - 0.15
         bias_dist = brentq(f, -plus, 0, xtol=1e-6)
         break
-    boat1.updateLocation(map1.move(current_head_degree, plus, -1))
+    boat1.updateLocation(map1.move(start_degree, x[i], -1))
     current_head_degree = boat1.board[0].head_degree
 
+boat1.saveCurrentStatus("results/q2.csv")
 # 画图
 print(x[i]+bias_dist)
 fig, ax = plt.subplots()

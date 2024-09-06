@@ -52,16 +52,21 @@ class Map:
         寻找该点切线的角度
         angle: 角度，单位为度
         '''
-        def x_func(a):
-            return self.angleToPos(a)[0]
+        # def x_func(a):
+        #     return self.angleToPos(a)[0]
         
-        def y_func(a):
-            return self.angleToPos(a)[1]
+        # def y_func(a):
+        #     return self.angleToPos(a)[1]
         
-        dx_da = derivative(x_func, angle, dx=1e-6)
-        dy_da = derivative(y_func, angle, dx=1e-6)
+        # dx_da = derivative(x_func, angle, dx=1e-6)
+        # dy_da = derivative(y_func, angle, dx=1e-6)
         
-        tangent_angle = np.degrees(np.arctan2(dy_da, dx_da))
+        # tangent_angle = np.degrees(np.arctan2(dy_da, dx_da))
+        angle = np.radians(angle)
+        
+        tangent_angle_1 = np.sin(angle) + np.cos(angle) * angle
+        tangent_angle_2 = np.cos(angle) - np.sin(angle) * angle
+        tangent_angle = np.degrees(np.arctan2(tangent_angle_1, tangent_angle_2))
         
         return tangent_angle
     

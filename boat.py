@@ -53,46 +53,103 @@ class boat:
                         str(self.board[i].head_line_speed) + ',' + 
                         str(self.board[i].tail_line_speed) + '\n')
                 
-    def judgeHeadCollision_diatance(self):
+    # def judgeHeadCollision_diatance(self):
+    #     '''
+    #     判断是否发生头部碰撞
+    #     返回值：distance
+    #     '''
+        
+    #     # 计算顶角位置
+    #     degree_fix = np.degrees(np.arctan2(0.15, 0.275))
+    #     head_stick_degree = self.board[0].stick_degree
+    #     head_position_degree = self.board[0].head_degree
+    #     [head_position_x, head_position_y] = self.map.angleToPos(head_position_degree)
+        
+    #     l = np.sqrt(0.15**2 + 0.275**2)
+    #     corner_position_x = head_position_x + np.cos(np.radians(head_stick_degree + degree_fix-180)) * l
+    #     corner_position_y = head_position_y + np.sin(np.radians(head_stick_degree + degree_fix-180)) * l
+    #     # print(head_position_x, head_position_y, corner_position_x, corner_position_y)
+        
+    #     # 寻找外圈的一个点
+    #     for i in range(1, 223):
+    #         if self.board[i].head_degree < (head_position_degree+360) and self.board[i].tail_degree > (head_position_degree+360):
+    #             break
+    #     # print(i)
+        
+    #     # 计算点到直线距离
+    #     out_head_position_degree = self.board[i].head_degree
+    #     out_tail_position_degree = self.board[i].tail_degree
+    #     [out_head_position_x, out_head_position_y] = self.map.angleToPos(out_head_position_degree)
+    #     [out_tail_position_x, out_tail_position_y] = self.map.angleToPos(out_tail_position_degree)
+    #     # print(out_head_position_x, out_head_position_y, out_tail_position_x, out_tail_position_y)
+        
+    #     # 计算直线方程
+    #     k = (out_tail_position_y - out_head_position_y) / (out_tail_position_x - out_head_position_x)
+    #     b = out_head_position_y - k * out_head_position_x
+        
+    #     # 计算点到直线距离
+    #     distance = abs(k * corner_position_x - corner_position_y + b) / np.sqrt(k**2 + 1)
+    #     # print(distance)
+        
+    #     # 判断是否发生碰撞
+    #     return distance
+
+    def createCollisionDetectFunc(self, board_index, head_or_tail):
         '''
         判断是否发生头部碰撞
+        board_index: 板凳索引
+        head_or_tail: 头部或尾部, 0表示头部，1表示尾部
         返回值：distance
         '''
         
-        # 计算顶角位置
-        degree_fix = np.degrees(np.arctan2(0.15, 0.275))
-        head_stick_degree = self.board[0].stick_degree
-        head_position_degree = self.board[0].head_degree
-        [head_position_x, head_position_y] = self.map.angleToPos(head_position_degree)
-        
-        l = np.sqrt(0.15**2 + 0.275**2)
-        corner_position_x = head_position_x + np.cos(np.radians(head_stick_degree + degree_fix-180)) * l
-        corner_position_y = head_position_y + np.sin(np.radians(head_stick_degree + degree_fix-180)) * l
-        # print(head_position_x, head_position_y, corner_position_x, corner_position_y)
-        
-        # 寻找外圈的一个点
-        for i in range(1, 223):
-            if self.board[i].head_degree < (head_position_degree+360) and self.board[i].tail_degree > (head_position_degree+360):
-                break
-        # print(i)
-        
-        # 计算点到直线距离
-        out_head_position_degree = self.board[i].head_degree
-        out_tail_position_degree = self.board[i].tail_degree
-        [out_head_position_x, out_head_position_y] = self.map.angleToPos(out_head_position_degree)
-        [out_tail_position_x, out_tail_position_y] = self.map.angleToPos(out_tail_position_degree)
-        # print(out_head_position_x, out_head_position_y, out_tail_position_x, out_tail_position_y)
-        
-        # 计算直线方程
-        k = (out_tail_position_y - out_head_position_y) / (out_tail_position_x - out_head_position_x)
-        b = out_head_position_y - k * out_head_position_x
-        
-        # 计算点到直线距离
-        distance = abs(k * corner_position_x - corner_position_y + b) / np.sqrt(k**2 + 1)
-        # print(distance)
-        
-        # 判断是否发生碰撞
-        return distance
+        def f():
+            # 计算顶角位置
+            degree_fix = np.degrees(np.arctan2(0.15, 0.275))
+            head_stick_degree = self.board[board_index].stick_degree
+            
+            if head_or_tail == 0:
+                head_position_degree = self.board[board_index].head_degree
+            else:
+                head_position_degree = self.board[board_index].tail_degree
+            [head_position_x, head_position_y] = self.map.angleToPos(head_position_degree)
+            
+            l = np.sqrt(0.15**2 + 0.275**2)
+            
+            if head_or_tail == 0:
+                corner_position_x = head_position_x + np.cos(np.radians(head_stick_degree + degree_fix-180)) * l
+                corner_position_y = head_position_y + np.sin(np.radians(head_stick_degree + degree_fix-180)) * l
+            else:
+                corner_position_x = head_position_x + np.cos(np.radians(head_stick_degree - degree_fix)) * l
+                corner_position_y = head_position_y + np.sin(np.radians(head_stick_degree - degree_fix)) * l
+            
+            # 寻找外圈的一个点
+            for i in range(1, 223):
+                if self.board[i].head_degree < (head_position_degree+360) and self.board[i].tail_degree > (head_position_degree+360):
+                    break
+            
+            # 计算点到直线距离
+            def dist(index):
+                out_head_position_degree = self.board[index].head_degree
+                out_tail_position_degree = self.board[index].tail_degree
+                [out_head_position_x, out_head_position_y] = self.map.angleToPos(out_head_position_degree)
+                [out_tail_position_x, out_tail_position_y] = self.map.angleToPos(out_tail_position_degree)
+                
+                # 计算直线方程
+                k = (out_tail_position_y - out_head_position_y) / (out_tail_position_x - out_head_position_x)
+                b = out_head_position_y - k * out_head_position_x
+                
+                # 计算点到直线距离
+                distance = abs(k * corner_position_x - corner_position_y + b) / np.sqrt(k**2 + 1)
+                return distance
+            
+            dist1 = dist(i)
+            dist2 = dist(i-1)
+            dist3 = dist(i+1)
+            distance = min(dist1, dist2, dist3)
+            
+            # 判断是否发生碰撞
+            return distance
+        return f
 
 
 

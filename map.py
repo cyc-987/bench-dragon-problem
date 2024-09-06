@@ -14,6 +14,7 @@ class Map:
         
     def angleToPos(self, angle):
         '''
+        角度坐标到直角坐标的转换
         angle: 角度，单位为度
         '''
         netAngle = angle % 360
@@ -24,6 +25,13 @@ class Map:
         y = r * np.sin(np.radians(netAngle))
         
         return np.array([x, y])
+    
+    def angleToR(self, angle):
+        '''
+        角度坐标转换为距离原点距离
+        angle: 角度，单位为度
+        '''
+        return self.scale * angle
     
     def findAngle(self, angle, len, direction):
         '''
@@ -41,9 +49,10 @@ class Map:
             return (location[0] - a)**2 + (location[1] - b)**2 - len**2
         
         compare = f(angle)
-        for i in range(0, 360):
-            if f(angle + direction*i) * compare <= 0:
+        for i in range(1, 360):
+            if f(angle + direction*i) * compare < 0:
                 break
+        assert i < 359
         
         return brentq(f, angle, angle+direction*i, xtol=1e-6)
     
@@ -76,20 +85,13 @@ class Map:
         start_angle: 起始角度，单位为度
         end_angle: 结束角度，单位为度
         '''
-        def integrand(angle):
-            def x_func(a):
-                return self.angleToPos(a)[0]
-            
-            def y_func(a):
-                return self.angleToPos(a)[1]
-            
-            dx_da = derivative(x_func, angle, dx=1e-6)
-            dy_da = derivative(y_func, angle, dx=1e-6)
-            
-            return np.sqrt(dx_da**2 + dy_da**2)
+        start_angle = np.radians(start_angle)
+        end_angle = np.radians(end_angle)
         
-        length, _ = quad(integrand, start_angle, end_angle)
-        return abs(length)
+        def totalIntegral(a):
+            return (self.scale*360/(4*np.pi)) * (a*np.sqrt(1+a**2) + np.log(a + np.sqrt(1+a**2)))
+        
+        return abs(totalIntegral(end_angle) - totalIntegral(start_angle))
     
     def move(self, start_angle, distance, direction):
         '''

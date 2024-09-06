@@ -23,7 +23,7 @@ class boat:
         self.saveCurrentStatus("initial.csv")
 
         # q4以后用的参数，位置参数，1到4代表不同的分段
-        self.position = 1
+        self.position_status = 1
         
         
     def updateLocation(self, headangle):

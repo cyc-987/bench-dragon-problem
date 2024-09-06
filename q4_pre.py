@@ -28,7 +28,7 @@ print("r1:", r1, "r2:", r2)
 
 ax, ay = x, y
 bx, by = -x, -y
-px, py = x+2/3*(-x), y+2/3*(-y)
+px, py = x+2/3*(-2*x), y+2/3*(-2*y)
 
 h1x, h1y = (px+ax)/2, (py+ay)/2
 h2x, h2y = (px+bx)/2, (py+by)/2

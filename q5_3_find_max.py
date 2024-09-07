@@ -14,4 +14,8 @@ def find_max_speed(dist):
     return -boat1.findMaxLineSpeed()
 
 result = minimize(find_max_speed, 14.3, bounds=[(14, 15)])
-print(result)
+# print(result)
+max_value = -result.fun
+max_dist = result.x
+max_speed = 2 / max_value
+print("max speed: ", max_speed, "m/s")

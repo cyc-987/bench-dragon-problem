@@ -107,7 +107,7 @@ class Map_dist:
             while i < 6000:
                 if f1(self.boundary_head_angle_degree + i) > 0:
                     break
-                i += 1
+                i += 30
             assert i < 5999 and i != 0
             
             angle = brentq(f1, self.boundary_head_angle_degree, self.boundary_head_angle_degree + i, xtol=1e-6) 
@@ -231,11 +231,11 @@ class boat:
         self.board[0].head_pos = head_pos
         self.head_pos = head_pos
         self.board[0].updateStatus()
-        print("test point")
+        # print("test point")
         for i in range(1, 223):
             self.board[i].head_pos = self.board[i-1].tail_pos
             self.board[i].head_line_speed = self.board[i-1].tail_line_speed
-            print("processing", i)
+            # print("processing", i)
             self.board[i].updateStatus()
     
     def saveCurrentStatus(self, filename):
@@ -252,6 +252,24 @@ class boat:
                         str(self.board[i].stick_degree) + ',' + 
                         str(self.board[i].head_cut_degree) + ',' + 
                         str(self.board[i].tail_cut_degree) + ',' + 
+                        str(self.board[i].stick_speed) + ',' + 
+                        str(self.board[i].head_line_speed) + ',' + 
+                        str(self.board[i].tail_line_speed) + '\n')
+    def saveResult(self, filename):
+        '''
+        保存结果
+        '''
+        with open (filename, 'w') as f:
+            f.write('node,head_x,head_y,tail_x,tail_y,stick_speed,head_line_speed,tail_line_speed\n')
+
+            for i in range(223):
+                [head_x, head_y] = self.map.distToPos(self.board[i].head_pos)
+                [tail_x, tail_y] = self.map.distToPos(self.board[i].tail_pos)
+                f.write(str(i) + ',' +
+                        str(head_x) + ',' + 
+                        str(head_y) + ',' + 
+                        str(tail_x) + ',' + 
+                        str(tail_y) + ',' + 
                         str(self.board[i].stick_speed) + ',' + 
                         str(self.board[i].head_line_speed) + ',' + 
                         str(self.board[i].tail_line_speed) + '\n')

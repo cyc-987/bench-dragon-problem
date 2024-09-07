@@ -214,6 +214,7 @@ class boat:
         self.head_pos = 0
         self.map = map1
         self.head_len = 2.86
+        # self.head_len = 1.65
         self.body_len = 1.65
         
         # 创建板凳实例
@@ -273,6 +274,16 @@ class boat:
                         str(self.board[i].stick_speed) + ',' + 
                         str(self.board[i].head_line_speed) + ',' + 
                         str(self.board[i].tail_line_speed) + '\n')
+    
+    def findMaxLineSpeed(self):
+        '''
+        寻找最大线速度
+        '''
+        max_speed = 0
+        for i in range(223):
+            max_speed = max(max_speed, self.board[i].head_line_speed)
+        max_speed = max(max_speed, self.board[222].tail_line_speed)
+        return max_speed
 
 class board:
     '''

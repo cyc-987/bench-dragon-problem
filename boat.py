@@ -52,6 +52,27 @@ class boat:
                         str(self.board[i].stick_speed) + ',' + 
                         str(self.board[i].head_line_speed) + ',' + 
                         str(self.board[i].tail_line_speed) + '\n')
+
+    def outputFormat(self):
+        '''
+        按题目要求输出
+        返回列向量：
+            龙头x (m)
+            龙头y (m)
+            第1节龙身x (m)
+            第1节龙身y (m)
+            ...
+        '''
+        result = []
+        for i in range(223):
+            [head_x, head_y] = self.map.angleToPos(self.board[i].head_degree)
+            result.append(head_x)
+            result.append(head_y)
+        [tail_x, tail_y] = self.map.angleToPos(self.board[222].tail_degree)
+        result.append(tail_x)
+        result.append(tail_y)
+        return np.array(result)
+            
                 
     # def judgeHeadCollision_diatance(self):
     #     '''

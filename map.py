@@ -47,9 +47,8 @@ class Map:
             location = self.angleToPos(x)
             return (location[0] - a)**2 + (location[1] - b)**2 - len**2
         
-        compare = -1
         for i in range(0, 360):
-            if f(angle + direction*i) * compare < 0:
+            if f(angle + direction*i) > 0:
                 break
         assert i < 359 and i != 0
         

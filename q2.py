@@ -4,6 +4,7 @@ from scipy.optimize import brentq
 import map
 import boat
 import tqdm
+import pandas as pd
 
 map1 = map.Map(0.55)
 start_degree = 16*360
@@ -21,7 +22,7 @@ y = np.zeros(numofpoints)
 headCollectionDetect = boat1.createCollisionDetectFunc(0, 0)
 
 # 逐个点检测碰撞
-for i in tqdm.tqdm(range(numofpoints)):
+for i in tqdm.tqdm(range(numofpoints), ncols=100):
     y[i] = headCollectionDetect() - 0.15
     if y[i] < 0:
         # 监测到发生碰撞，使用二分法寻找精确碰撞点
@@ -39,9 +40,26 @@ for i in tqdm.tqdm(range(numofpoints)):
     current_head_degree = boat1.board[0].head_degree
 
 boat1.saveCurrentStatus("results/q2.csv")
+location_degree = x[i] + bias_dist
+
 # 画图
-print(x[i]+bias_dist)
+print(location_degree)
 fig, ax = plt.subplots()
 ax.grid(True)
 ax.plot(x, y)
 plt.show()
+
+# 保存结果
+boat1.updateLocation(map1.move(start_degree, location_degree, -1))
+result = np.zeros((224, 3))
+
+pos = boat1.outputFormatPosition()
+speed = boat1.outputFormatSpeed()
+
+for i in range(224):
+    result[i, 0] = pos[2*i]
+    result[i, 1] = pos[2*i+1]
+result[:, 2] = speed
+
+data_pd = pd.DataFrame(result)
+data_pd.to_excel('Excel_output/q2.xlsx', float_format="%.6f")

@@ -13,7 +13,7 @@ r = map1.angleToR(boat1.board[0].head_degree)
 print("r:", r)
 [x,y] = map1.angleToPos(boat1.board[0].head_degree)
 print("x:", x, "y:", y)
-boat1.saveCurrentStatus("q4_pre.csv")
+boat1.saveCurrentStatus("results/q4_pre.csv")
 
 v_cut_degree = abs(boat1.board[0].head_cut_degree)
 print("v_cut_degree:", v_cut_degree)

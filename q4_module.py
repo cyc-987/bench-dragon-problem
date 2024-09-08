@@ -222,7 +222,7 @@ class boat:
         self.board[0].length = self.head_len
         
         self.updateLocation(0)
-        self.saveCurrentStatus("initial_q4.csv")
+        self.saveCurrentStatus("results/initial_q4.csv")
         
         
     def updateLocation(self, head_pos):

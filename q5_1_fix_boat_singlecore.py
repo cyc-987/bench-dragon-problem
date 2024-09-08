@@ -19,8 +19,7 @@ try:
 except:
     distances = np.linspace(0, 50, 500)
     max_speeds = np.array([find_max_speed(dist) for dist in tqdm.tqdm(distances, ncols=100)])
-
-np.save('q5_data/0_50_board15_head.npy', [distances, max_speeds])
+    np.save('q5_data/0_50_board15_head.npy', [distances, max_speeds])
 
 # Plot the results
 fig, ax = plt.subplots()

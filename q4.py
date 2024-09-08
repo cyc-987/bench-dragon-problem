@@ -25,14 +25,14 @@ data_pd2 = pd.DataFrame(speed)
 data_pd.to_excel('Excel_output/q4_pos.xlsx', float_format="%.6f")
 data_pd2.to_excel('Excel_output/q4_speed.xlsx', float_format="%.6f")
 
-# boat1.updateLocation(-100)
-# boat1.saveResult("results/q4_-100.csv")
+boat1.updateLocation(-100)
+boat1.saveResult("results/q4_-100.csv")
 
-# boat1.updateLocation(-50)
-# boat1.saveResult("results/q4_-50.csv")
+boat1.updateLocation(-50)
+boat1.saveResult("results/q4_-50.csv")
 
-# boat1.updateLocation(50)
-# boat1.saveResult("results/q4_50.csv")
+boat1.updateLocation(50)
+boat1.saveResult("results/q4_50.csv")
 
-# boat1.updateLocation(100)
-# boat1.saveResult("results/q4_100.csv")
+boat1.updateLocation(100)
+boat1.saveResult("results/q4_100.csv")

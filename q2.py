@@ -6,6 +6,19 @@ import boat
 import tqdm
 import pandas as pd
 
+# syk
+from matplotlib import rcParams
+
+# 配置
+config = {
+    "font.family": ['Times New Roman', 'STZhongsong'],
+    "font.size": 12,
+    "mathtext.fontset": 'stix',
+    'axes.unicode_minus': False
+}
+rcParams.update(config)
+# syk
+
 map1 = map.Map(0.55)
 start_degree = 16*360
 boat1 = boat.boat(start_degree, map1)
@@ -45,9 +58,25 @@ location_degree = x[i] + bias_dist
 # 画图
 print(location_degree)
 fig, ax = plt.subplots()
+# 画图
+collision_point_x = x[i] + bias_dist
+collision_point_y = y[i]
+
+fig, ax = plt.subplots(figsize=(12, 12))  # 设置窗口大小
+ax.plot(x, y, label='检测函数值', color='black')
+ax.axhline(y=0, color='black', linestyle='--')  # 添加y=0的水平线，方便观察碰撞位置
+ax.plot(collision_point_x, collision_point_y, 'ro', markersize=10, label=f'检测到碰撞')
+
+# 设置标题和标签
+ax.set_title('二分法计算碰撞检测函数值迭代图像')
+ax.set_xlabel('龙头前把手前进距离 (米)')
+ax.set_ylabel('检测函数值')
+ax.legend()
 ax.grid(True)
-ax.plot(x, y)
 plt.show()
+# 输出碰撞的具体参数
+print(f"碰撞发生点的前进距离: {collision_point_x:.6f} 米")
+print(f"碰撞点的检测函数值: {collision_point_y:.2f}")
 
 # 保存结果
 boat1.updateLocation(map1.move(start_degree, location_degree, -1))

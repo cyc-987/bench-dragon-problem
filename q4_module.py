@@ -284,6 +284,39 @@ class boat:
             max_speed = max(max_speed, self.board[i].head_line_speed)
         max_speed = max(max_speed, self.board[222].tail_line_speed)
         return max_speed
+    
+    def outputFormatPosition(self):
+        '''
+        按题目要求输出
+        返回列向量：
+            龙头x (m)
+            龙头y (m)
+            第1节龙身x (m)
+            第1节龙身y (m)
+            ...
+        '''
+        result = []
+        for i in range(223):
+            [head_x, head_y] = self.map.distToPos(self.board[i].head_pos)
+            result.append(head_x)
+            result.append(head_y)
+        [tail_x, tail_y] = self.map.distToPos(self.board[222].tail_pos)
+        result.append(tail_x)
+        result.append(tail_y)
+        return np.array(result)
+    def outputFormatSpeed(self):
+        '''
+        按题目要求输出
+        返回列向量：
+            龙头速度 (m/s)
+            第1节龙身速度 (m/s)
+            ...
+        '''
+        result = []
+        for i in range(223):
+            result.append(self.board[i].head_line_speed)
+        result.append(self.board[222].tail_line_speed)
+        return np.array(result)
 
 class board:
     '''

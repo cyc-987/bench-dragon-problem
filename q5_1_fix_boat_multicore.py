@@ -17,16 +17,14 @@ def find_max_speed(dist):
 
 
 def main():
-    distances = np.linspace(0, 50, 500)
-
     try:
-        data = np.load('q5_data/0_50_board20_head.npy', allow_pickle=True)
+        data = np.load('q5_data/0_50_board20_head1.npy', allow_pickle=True)
+        [distances, max_speeds] = data
     except:
-
+        distances = np.linspace(0, 50, 500)
         with Pool() as pool:
             max_speeds = pool.map(find_max_speed, distances)
             
-    [distances, max_speeds] = data
 
     max_speeds = np.array(max_speeds)
     np.save('q5_data/0_50_board20_head_2.npy', [distances, max_speeds])

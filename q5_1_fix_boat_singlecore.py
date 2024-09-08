@@ -13,10 +13,12 @@ def find_max_speed(dist):
     # return boat1.findMaxLineSpeed()
     return boat1.board[15].head_line_speed
 
-
-distances = np.linspace(0, 50, 500)
-
-max_speeds = np.array([find_max_speed(dist) for dist in tqdm.tqdm(distances, ncols=100)])
+try:
+    data = np.load('q5_data/0_50_board15_head.npy', allow_pickle=True)
+    [distances, max_speeds] = data
+except:
+    distances = np.linspace(0, 50, 500)
+    max_speeds = np.array([find_max_speed(dist) for dist in tqdm.tqdm(distances, ncols=100)])
 
 np.save('q5_data/0_50_board15_head.npy', [distances, max_speeds])
 
